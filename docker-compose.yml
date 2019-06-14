@@ -1,0 +1,50 @@
+version: '3.1'
+
+services:
+  vwp_wordpress:
+    build: .
+    restart: always
+    ports:
+      - 80:80
+    volumes: 
+      - ./theme:/var/www/html/wp-content/themes/client-theme
+      - ./php_configs/php_conf.ini:/usr/local/etc/php/conf.d/php_conf.ini
+      - ./php_configs/.htaccess:/var/www/html/.htaccess
+      - vwp_plugins:/var/www/html/wp-content/plugins
+      - vwp_uploads:/var/www/html/wp-content/uploads
+    environment:
+      WORDPRESS_DB_HOST: vwp_db
+      WORDPRESS_DB_USER: vwp
+      WORDPRESS_DB_PASSWORD: viewup@vwp
+      WORDPRESS_DB_NAME: vwp_wp
+      # WORDPRESS_DEBUG: 0
+
+  vwp_pma:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: vwp_db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: viewup@vwp
+    ports:
+      - 8080:80
+    links:
+      - vwp_db
+  vwp_db:
+    restart: always
+    image: mysql:latest
+    command: [
+        '--default_authentication_plugin=mysql_native_password',
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci'
+    ]
+    volumes: 
+      - vwp_mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: vwp_wp
+      MYSQL_USER: vwp
+      MYSQL_PASSWORD: viewup@vwp
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+volumes: 
+  vwp_mysql:
+  vwp_plugins:
+  vwp_uploads:
