@@ -14,6 +14,22 @@
 
 <? get_header(); ?>
 
-<div class="logo"></div>
+<div class="bg">
+    <div class="slogan">Em breve</div>
+    <div class="faixa">
+        <img src="<?= get_template_directory_uri() ?>/img/logo.png" class="logo">
+    </div>
+    <div class="slogan">Consultoria Logística</div>
+
+
+    <div class="nl">
+        <div class="texto-nl">Deixe seu nome e e-mail para receber novidades</div>
+        <?= do_shortcode('[contact-form-7 id="5" title="Newsletter"]') ?>
+    </div>
+</div>
+
+<div class="bg img1"></div>
+<div class="bg img2"></div>
+
 
 <? get_footer(); ?>
